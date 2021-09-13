@@ -16,6 +16,8 @@ Hence do refer to only https://github.com/dimaspivak/sch_ci_cd_poc.git
 * [Access to StreamSets Control Hub](https://streamsets.com/documentation/controlhub/latest/help/controlhub/UserGuide/OrganizationSecurity/OrgSecurity_Overview.html#concept_q5z_jkl_wy) with an user account in your  organization 
 * At least one [StreamSets Data Collector](https://streamsets.com/products/dataops-platform/data-collector/) instance registered with the above StreamSets Control Hub instance
 and has a label = 'CI/CD test'
+* A pipeline created with the details as explained in [Create CI CD demo Pipeline tutorial](https://github.com/streamsets/tutorials/blob/master/sdk-tutorials/sch/tutorial-pipelines/create-ci-cd-demo-pipeline/README.md).
+One can create it in UI or using SDK for Python. 
 
 # Goal
 **Brief:** Validate a pipeline before deploying

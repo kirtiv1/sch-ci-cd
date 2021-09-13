@@ -11,8 +11,8 @@ def pytest_addoption(parser):
 
 
 @pytest.fixture(scope='session')
-def sch(sch_session):
-    yield sch_session
+def sch(sch):
+    yield sch
 
 
 @pytest.fixture(scope='session')
@@ -22,7 +22,7 @@ def pipeline(sch, request):
 
     yield pipeline_
 
-    jobs_to_delete = sch.jobs.get_all(pipeline_id=pipeline_.pipeline_id, description='Kirti CI/CD test job')
+    jobs_to_delete = sch.jobs.get_all(pipeline_id=pipeline_.pipeline_id, description='Summer21 CI/CD test job')
     if jobs_to_delete:
         logger.debug('Deleting test jobs: %s ...', ', '.join(str(job) for job in jobs_to_delete))
         sch.delete_job(*jobs_to_delete)

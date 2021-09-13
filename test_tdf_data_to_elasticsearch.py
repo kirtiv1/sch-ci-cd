@@ -83,24 +83,24 @@ def elasticsearch_data(sch, pipeline, database, elasticsearch):
                                   ELASTICSEARCH_PASSWORD=elasticsearch.password,
                                   ELASTICSEARCH_INDEX=index,
                                   TABLE_NAME=table_name)
-        job = job_builder.build('Kirti: Test job for tdf_data_to_elasticsearch pipeline',
+        job = job_builder.build('Test job for CI-CD-pipeline',
                                 pipeline=pipeline,
                                 runtime_parameters=runtime_parameters)
-        job.description = 'Kirti CI/CD test job'
-        job.data_collector_labels = ['kirti-CI-CD']
+        job.description = 'Summer21 CI/CD test job'
+        job.data_collector_labels = ['CI-CD-Summer21-Dev']
         sch.add_job(job)
         sch.start_job(job)
 
         # Wait for records to be written.
         time.sleep(10)
 
-        data_in_elasticsearch = [hit.to_dict() for hit in elasticsearch.search(index=index).sort('rank').execute()]
+        data_in_elasticsearch = [hit['_source'] for hit in elasticsearch.client.search(index=index)]
         yield data_in_elasticsearch
     finally:
         sch.stop_job(job)
 
         logger.info('Deleting Elasticsearch index %s ...', index)
-        Index(index, using=elasticsearch.client).delete()
+        elasticsearch.client.delete_index(index)
 
         logger.info('Dropping table %s ...', table_name)
         table.drop(database.engine)
