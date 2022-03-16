@@ -22,10 +22,14 @@ def pipeline(sch, request):
 
     yield pipeline_
 
-    jobs_to_delete = sch.jobs.get_all(pipeline_id=pipeline_.pipeline_id, description='Summer21 CI/CD test job')
+    # Remove the job that was created from integration tests included in test_tdf_data_to_elasticsearch.py
+    jobs_to_delete = sch.jobs.get_all(pipeline_id=pipeline_.pipeline_id, description='DataOps CI/CD test job')
     if jobs_to_delete:
         logger.debug('Deleting test jobs: %s ...', ', '.join(str(job) for job in jobs_to_delete))
         sch.delete_job(*jobs_to_delete)
+
+    # If the tests passed and upgrade_jobs is requested, then upgrade the job/s
+    # with the latest version of the pipeline
     if not request.session.testsfailed:
         if request.config.getoption('upgrade_jobs'):
             pipeline_ = sch.pipelines.get(pipeline_id=pipeline_id)
